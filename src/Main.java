@@ -11,14 +11,17 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String command;
-        Position position = null;
+        Logger logger = new Logger();
+        Position position = new Position("startpos");
         while (!(command = sc.nextLine()).equals("quit")) {
+            logger.write(command);
             if ("ucci".equals(command)) {
                 printUcciOk();
             } else if ("isready".equals(command)) {
                 System.out.println("readyok");
             } else if (command.startsWith("go")) {
-                System.out.println(position);
+                Move move = position.bestMove();
+                System.out.println("bestmove " + move.from + move.to);
             } else if (command.startsWith("position")) {
                 String fen;
                 int movesStart = command.indexOf("moves");

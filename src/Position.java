@@ -50,6 +50,11 @@ public class Position {
         }
     }
 
+    public Move bestMove() {
+        Location from = new Location("b2"), to = new Location("e2");
+        return new Move(from, to);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
