@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exe4j version="7.0" transformSequenceNumber="3">
+  <directoryPresets config="D:/JavaApp/xiaoshi/out/artifacts/xiaoshi_jar" />
+  <application name="xiaoshi" distributionSourceDir="D:/ChessEngines/xiaoshi" />
+  <executable name="xiaoshi" wrapperType="embed" redirectStderr="false" executableMode="console" />
+  <java mainClass="Main" minVersion="1.8.0">
+    <classPath>
+      <archive location="D:/JavaApp/xiaoshi/out/artifacts/xiaoshi_jar/xiaoshi.jar" failOnError="false" />
+    </classPath>
+  </java>
+</exe4j>
