@@ -21,7 +21,11 @@ public class Main {
                 System.out.println("readyok");
             } else if (command.startsWith("go")) {
                 Move move = position.bestMove();
-                System.out.println("bestmove " + move.from + move.to);
+                if (move == null) {
+                    System.out.println("nobestmove");
+                } else {
+                    System.out.println("bestmove " + move.from + move.to);
+                }
             } else if (command.startsWith("position")) {
                 String fen;
                 int movesStart = command.indexOf("moves");
@@ -42,6 +46,7 @@ public class Main {
                     position.applyMoves(moves);
                 }
             }
+            System.out.flush();
         }
         System.out.println("bye");
     }

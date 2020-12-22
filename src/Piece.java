@@ -45,4 +45,8 @@ public class Piece {
                 break;
         }
     }
+
+    public boolean belongBlack() {
+        return belong == Player.BLACK;
+    }
 }
