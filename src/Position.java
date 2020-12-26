@@ -72,6 +72,14 @@ public class Position {
     }
 
     public Move bestMove() {
+        if (Configuration.getBestMoveType().equals("rand")) {
+            return bestMoveRand();
+        } else {
+            return bestMoveV1();
+        }
+    }
+
+    private Move bestMoveRand() {
         Piece piece;
         int times = 0;
         Location from, to;
@@ -85,12 +93,28 @@ public class Position {
             if (locations.size() > 0) {
                 from = piece.at;
                 to = locations.get(random(locations.size()));
-                System.out.println("info depth 5 score -300");
-                return new Move(from, to);
+                Move move = new Move(from, to);
+                System.out.println("info depth 5 score " + evaluate() + " pv " + move);
+                return move;
             }
             times++;
         }
         return null;
+    }
+
+    private Move bestMoveV1() {
+        return null;
+    }
+
+    public int evaluate() {
+        int sc = 0;
+        for (Piece p: redPieces) {
+            sc += p.score;
+        }
+        for (Piece p: blackPieces) {
+            sc -= p.score;
+        }
+        return cur == Player.BLACK ? -sc : sc;
     }
 
     @Override

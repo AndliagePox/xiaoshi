@@ -24,7 +24,7 @@ public class Main {
                 if (move == null) {
                     System.out.println("nobestmove");
                 } else {
-                    System.out.println("bestmove " + move.from + move.to);
+                    System.out.println("bestmove " + move);
                 }
             } else if (command.startsWith("position")) {
                 String fen;
