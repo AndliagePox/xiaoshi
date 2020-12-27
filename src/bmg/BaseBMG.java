@@ -29,6 +29,14 @@ abstract public class BaseBMG implements BestMoveGenerator {
         blackPieces = new ArrayList<>(position.getBlackPieces());
     }
 
+    protected List<Piece> getCurrentPieces() {
+        if (cur == Player.BLACK) {
+            return blackPieces;
+        } else {
+            return redPieces;
+        }
+    }
+
     protected List<Location> canMoveLocations(Piece piece) {
         int cx = piece.at.x;
         int cy = piece.at.y;
