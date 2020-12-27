@@ -3,6 +3,8 @@
  * Date: 2020-12-26
  */
 
+package base;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +16,11 @@ public class Configuration {
         map.put("bestmove-type", "rand");
     }
 
-    static String getBestMoveType() {
+    public static String getBestMoveType() {
         return map.get("bestmove-type");
+    }
+
+    public static String getEvaluateType() {
+        return map.get("evaluate-type");
     }
 }

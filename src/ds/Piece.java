@@ -3,12 +3,14 @@
  * Date: 2020-12-21
  */
 
+package ds;
+
 public class Piece {
-    int score;
-    char c;
-    Player belong;
-    PieceType type;
-    Location at;
+    public int score;
+    public char c;
+    public Player belong;
+    public PieceType type;
+    public Location at;
 
     public Piece(char c, int x, int y) {
         this.c = c;
@@ -49,11 +51,7 @@ public class Piece {
                 break;
             case 'P':
                 type = PieceType.PAWN;
-                if (belongBlack() && at.x > 4 || !belongBlack() && at.x < 6) {
-                    score = 200;
-                } else {
-                    score = 100;
-                }
+                score = 200;
                 break;
         }
     }

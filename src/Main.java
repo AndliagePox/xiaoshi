@@ -3,6 +3,13 @@
  * Date: 2020-12-20
  */
 
+import bmg.BestMoveGenerator;
+import base.Logger;
+import bmg.RandBMG;
+import ds.Location;
+import ds.Move;
+import ds.Position;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -20,7 +27,8 @@ public class Main {
             } else if ("isready".equals(command)) {
                 System.out.println("readyok");
             } else if (command.startsWith("go")) {
-                Move move = position.bestMove();
+                BestMoveGenerator generator = new RandBMG(position);
+                Move move = generator.bestMove();
                 if (move == null) {
                     System.out.println("nobestmove");
                 } else {

@@ -2,9 +2,10 @@
  * Author: Andliage Pox
  * Date: 2020-12-21
  */
+package ds;
 
 public class Location {
-    int x, y;
+    public int x, y;
 
    public Location(int x, int y) {
        this.x = x;

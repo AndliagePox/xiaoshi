@@ -3,9 +3,11 @@
  * Date: 2020-12-21
  */
 
+package ds;
+
 public class Move {
-    Location from;
-    Location to;
+    public Location from;
+    public Location to;
 
     public Move(Location from, Location to) {
         this.from = from;

@@ -1,139 +1,35 @@
 /*
  * Author: Andliage Pox
- * Date: 2020-12-21
+ * Date: 2020-12-26
  */
+
+package bmg;
+
+import ds.PieceType;
+import ds.Player;
+import ds.Location;
+import ds.Piece;
+import ds.Position;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class Position {
-    Player cur;
-    Piece[][] board = new Piece[10][9];
+abstract public class BaseBMG implements BestMoveGenerator {
+    protected Position position;
+    protected Player cur;
+    protected Piece[][] board;
+    protected List<Piece> redPieces;
+    protected List<Piece> blackPieces;
 
-    List<Piece> redPieces = new ArrayList<>();
-    List<Piece> blackPieces = new ArrayList<>();
-
-    public Position(String fen) {
-        if (fen.equals("startpos")) {
-            fen = "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1";
-        }
-        String[] parts = fen.split(" ");
-
-        if (parts[1].equals("b")) {
-            cur = Player.BLACK;
-        } else {
-            cur = Player.RED;
-        }
-
-        int i = 0, j = 0;
-        String[] rows = parts[0].split("/");
-        for (String row: rows) {
-            for (char c: row.toCharArray()) {
-                if (c > '0' && c <= '9') {
-                    j += (c - '0');
-                } else {
-                    Piece piece = new Piece(c, i, j);
-                    board[i][j] = piece;
-                    if (piece.belong == Player.BLACK) {
-                        blackPieces.add(piece);
-                    } else {
-                        redPieces.add(piece);
-                    }
-                    j++;
-                }
-            }
-            i++;
-            j = 0;
-        }
+    public BaseBMG(Position position) {
+        this.position = position;
+        cur = position.currentPlayer();
+        board = position.getBoard();
+        redPieces = new ArrayList<>(position.getRedPieces());
+        blackPieces = new ArrayList<>(position.getBlackPieces());
     }
 
-    public void applyMoves(List<Move> moves) {
-        for (Move move: moves) {
-            int fx = move.from.x;
-            int fy = move.from.y;
-            int tx = move.to.x;
-            int ty = move.to.y;
-
-            Piece piece = board[fx][fy];
-            board[fx][fy] = null;
-            if (board[tx][ty] != null) {
-                redPieces.remove(board[tx][ty]);
-                blackPieces.remove(board[tx][ty]);
-            }
-            board[tx][ty] = piece;
-            piece.at = new Location(tx, ty);
-            if (cur == Player.BLACK) {
-                cur = Player.RED;
-            } else {
-                cur = Player.BLACK;
-            }
-        }
-    }
-
-    public Move bestMove() {
-        if (Configuration.getBestMoveType().equals("rand")) {
-            return bestMoveRand();
-        } else {
-            return bestMoveV1();
-        }
-    }
-
-    private Move bestMoveRand() {
-        Piece piece;
-        int times = 0;
-        Location from, to;
-        while (times < 5) {
-            if (cur == Player.BLACK) {
-                piece = blackPieces.get(random(blackPieces.size()));
-            } else {
-                piece = redPieces.get(random(redPieces.size()));
-            }
-            List<Location> locations = canMoveLocations(piece);
-            if (locations.size() > 0) {
-                from = piece.at;
-                to = locations.get(random(locations.size()));
-                Move move = new Move(from, to);
-                System.out.println("info depth 5 score " + evaluate() + " pv " + move);
-                return move;
-            }
-            times++;
-        }
-        return null;
-    }
-
-    private Move bestMoveV1() {
-        return null;
-    }
-
-    public int evaluate() {
-        int sc = 0;
-        for (Piece p: redPieces) {
-            sc += p.score;
-        }
-        for (Piece p: blackPieces) {
-            sc -= p.score;
-        }
-        return cur == Player.BLACK ? -sc : sc;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (Piece[] row: board) {
-            for (Piece piece: row) {
-                if (piece == null) {
-                    sb.append(' ');
-                } else {
-                    sb.append(piece.c);
-                }
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-
-    private List<Location> canMoveLocations(Piece piece) {
+    protected List<Location> canMoveLocations(Piece piece) {
         int cx = piece.at.x;
         int cy = piece.at.y;
         List<Location> locations = new ArrayList<>();
@@ -293,11 +189,6 @@ public class Position {
             }
         }
         return locations;
-    }
-
-    private int random(int b) {
-        Random random = new Random();
-        return random.nextInt(b);
     }
 
     private void checkForAdd(List<Location> list, int x, int y) {
