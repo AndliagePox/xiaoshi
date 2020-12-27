@@ -8,12 +8,12 @@ package evaluator;
 import base.Configuration;
 
 abstract public class EvaluatorFactory {
-    public Evaluator createEvaluator() {
+    public static Evaluator createEvaluator() {
         String evaluateType = Configuration.getEvaluateType();
         if (evaluateType.equals("piece-value")) {
             return new PieceValueEvaluator();
         } else {
-            return null;
+            throw new RuntimeException("Invalid evaluate type [" + evaluateType + "].");
         }
     }
 }
