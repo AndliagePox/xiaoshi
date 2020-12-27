@@ -20,7 +20,8 @@ public class SearchBMG extends EvaluatorBMG {
     @Override
     public Move bestMove() {
         Move best = null;
-        int min = Integer.MAX_VALUE;
+        boolean canEat = false;
+        int min = -evaluator.evaluate(position);
         List<Piece> curPieces = getCurrentPieces();
 
         for (Piece piece: curPieces) {
@@ -28,12 +29,18 @@ public class SearchBMG extends EvaluatorBMG {
                 Move move = new Move(piece.at, location);
                 int nextScore = evaluator.evaluate(position.nextMove(move));
                 if (nextScore < min) {
+                    canEat = true;
                     min = nextScore;
                     best = move;
                 }
             }
         }
-        System.out.println("info depth 1 score " + min + " pv " + best);
+
+        if (!canEat) {
+            best = new RandBMG(position).bestMove();
+        }
+
+        System.out.println("info depth 1 score " + -min + " pv " + best);
 
         return best;
     }
