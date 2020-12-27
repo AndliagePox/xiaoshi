@@ -33,6 +33,7 @@ public class SearchBMG extends EvaluatorBMG {
                 }
             }
         }
+        System.out.println("info depth 1 score " + min + " pv " + best);
 
         return best;
     }
