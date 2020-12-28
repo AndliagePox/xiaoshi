@@ -12,8 +12,8 @@ import ds.Position;
 
 import java.util.List;
 
-public class SearchBMG extends EvaluatorBMG {
-    public SearchBMG(Position position) {
+public class EatBMG extends EvaluatorBMG {
+    public EatBMG(Position position) {
         super(position);
     }
 

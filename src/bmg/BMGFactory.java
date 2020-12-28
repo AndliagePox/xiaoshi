@@ -13,8 +13,8 @@ abstract public class BMGFactory {
         String bmgType = Configuration.getBestMoveType();
         if (bmgType.equals("rand")) {
             return new RandBMG(position);
-        } else if (bmgType.equals("search")) {
-            return new SearchBMG(position);
+        } else if (bmgType.equals("eat")) {
+            return new EatBMG(position);
         } else {
             throw new RuntimeException("Invalid bestmove generator type [" + bmgType + "].");
         }
