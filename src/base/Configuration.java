@@ -41,4 +41,12 @@ public class Configuration {
     public static int getSearchDepth() {
         return Integer.parseInt(map.get("depth"));
     }
+
+    public static boolean enableBook() {
+        return map.get("book-enable").equals("true");
+    }
+
+    public static String getBookType() {
+        return map.get("book-type");
+    }
 }

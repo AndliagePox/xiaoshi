@@ -287,6 +287,17 @@ public class Position {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Position)) return false;
+        return toString().equals(o.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
     private Player anotherPlayer() {
         if (cur == Player.BLACK) return Player.RED;
         else return Player.BLACK;

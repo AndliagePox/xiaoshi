@@ -3,9 +3,12 @@
  * Date: 2020-12-20
  */
 
+import base.Configuration;
 import bmg.BMGFactory;
 import bmg.BestMoveGenerator;
 import base.Logger;
+import book.Book;
+import book.BookFactory;
 import ds.Location;
 import ds.Move;
 import ds.Position;
@@ -20,6 +23,11 @@ public class Main {
         String command;
         Logger logger = new Logger();
         Position position = new Position("startpos");
+        Book book = null;
+        if (Configuration.enableBook()) {
+            book = BookFactory.createBook();
+        }
+
         while (!(command = sc.nextLine()).equals("quit")) {
             logger.write(command);
             if ("ucci".equals(command)) {
@@ -27,8 +35,14 @@ public class Main {
             } else if ("isready".equals(command)) {
                 System.out.println("readyok");
             } else if (command.startsWith("go")) {
-                BestMoveGenerator bmg = BMGFactory.createBMG(position);
-                Move move = bmg.bestMove();
+                Move move = null;
+                if (book != null) {
+                    move = book.nextMove(position);
+                }
+                if (move == null) {
+                    BestMoveGenerator bmg = BMGFactory.createBMG(position);
+                    move = bmg.bestMove();
+                }
                 if (move == null) {
                     System.out.println("nobestmove");
                 } else {

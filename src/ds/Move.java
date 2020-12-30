@@ -14,6 +14,11 @@ public class Move {
         this.to = to;
     }
 
+    public Move(String s) {
+        this.from = new Location(s.substring(0, 2));
+        this.to = new Location(s.substring(2));
+    }
+
     @Override
     public String toString() {
         return from.toString() + to.toString();
