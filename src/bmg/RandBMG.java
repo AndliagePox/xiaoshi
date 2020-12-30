@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 public class RandBMG extends BaseBMG {
+    private final Random random = new Random();
 
     public RandBMG(Position position) {
         super(position);
@@ -27,17 +28,17 @@ public class RandBMG extends BaseBMG {
         Location from, to;
         while (times < 5) {
             if (cur == Player.BLACK) {
+                if (blackPieces.isEmpty()) return null;
                 piece = blackPieces.get(random(blackPieces.size()));
             } else {
+                if (redPieces.isEmpty()) return null;
                 piece = redPieces.get(random(redPieces.size()));
             }
-            List<Location> locations = canMoveLocations(piece);
+            List<Location> locations = position.canMoveLocations(piece);
             if (locations.size() > 0) {
                 from = piece.at;
                 to = locations.get(random(locations.size()));
-                Move move = new Move(from, to);
-                System.out.println("info depth 1 score 0 pv " + move);
-                return move;
+                return new Move(from, to);
             }
             times++;
         }
@@ -45,7 +46,6 @@ public class RandBMG extends BaseBMG {
     }
 
     private int random(int b) {
-        Random random = new Random();
         return random.nextInt(b);
     }
 }

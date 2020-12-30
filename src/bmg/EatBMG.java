@@ -22,10 +22,10 @@ public class EatBMG extends EvaluatorBMG {
         Move best = null;
         boolean canEat = false;
         int min = -evaluator.evaluate(position);
-        List<Piece> curPieces = getCurrentPieces();
+        List<Piece> curPieces = position.getCurrentPieces();
 
         for (Piece piece: curPieces) {
-            for (Location location: canMoveLocations(piece)) {
+            for (Location location: position.canMoveLocations(piece)) {
                 Move move = new Move(piece.at, location);
                 int nextScore = evaluator.evaluate(position.nextMove(move));
                 if (nextScore < min) {

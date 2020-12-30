@@ -37,4 +37,8 @@ public class Configuration {
     public static String getEvaluateType() {
         return map.get("evaluate-type");
     }
+
+    public static int getSearchDepth() {
+        return Integer.parseInt(map.get("depth"));
+    }
 }

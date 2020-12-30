@@ -11,12 +11,15 @@ import ds.Position;
 abstract public class BMGFactory {
     public static BestMoveGenerator createBMG(Position position) {
         String bmgType = Configuration.getBestMoveType();
-        if (bmgType.equals("rand")) {
-            return new RandBMG(position);
-        } else if (bmgType.equals("eat")) {
-            return new EatBMG(position);
-        } else {
-            throw new RuntimeException("Invalid bestmove generator type [" + bmgType + "].");
+        switch (bmgType) {
+            case "rand":
+                return new RandBMG(position);
+            case "eat":
+                return new EatBMG(position);
+            case "bf-search":
+                return new BFSearchBMG(position);
+            default:
+                throw new RuntimeException("Invalid bestmove generator type [" + bmgType + "].");
         }
     }
 }
