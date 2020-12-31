@@ -12,6 +12,8 @@ abstract public class EvaluatorFactory {
         String evaluateType = Configuration.getEvaluateType();
         if (evaluateType.equals("piece-value")) {
             return new PieceValueEvaluator();
+        } else if (evaluateType.equals("combo")) {
+            return new ComboEvaluator(Configuration.getComboList());
         } else {
             throw new RuntimeException("Invalid evaluate type [" + evaluateType + "].");
         }

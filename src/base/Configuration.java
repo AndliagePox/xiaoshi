@@ -49,4 +49,8 @@ public class Configuration {
     public static String getBookType() {
         return map.get("book-type");
     }
+
+    public static String getComboList() {
+        return map.get("combo-list");
+    }
 }
