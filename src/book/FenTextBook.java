@@ -5,17 +5,20 @@
 
 package book;
 
+import base.Util;
 import ds.Move;
 import ds.Position;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FenTextBook extends BaseBook {
-    private final Map<Position, Item> map = new HashMap<>();
+    private final Map<Position, List<Item>> map = new HashMap<>();
 
     public FenTextBook() {
         try {
@@ -26,7 +29,8 @@ public class FenTextBook extends BaseBook {
                 Move move = new Move(line.substring(i + 5, i + 9));
                 String fen = line.substring(0, i);
                 int score = Integer.parseInt(line.substring(i + 10));
-                map.put(new Position(fen), new Item(score, move));
+                Position position = new Position(fen);
+                map.computeIfAbsent(position, k -> new ArrayList<>()).add(new Item(score, move));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -35,13 +39,11 @@ public class FenTextBook extends BaseBook {
 
     @Override
     public Move nextMove(Position position) {
-        Item item = map.get(position);
-        if (item != null) {
-            System.out.println("info book hit");
-            System.out.println("info depth 0 score " + item.score + " pv " + item.move);
-            return item.move;
-        } else {
-            return null;
-        }
+        List<Item> list = map.get(position);
+        if (list == null) return null;
+        Item item = list.get(Util.random(list.size()));
+        System.out.println("info book hit");
+        System.out.println("info depth 0 score " + item.score + " pv " + item.move);
+        return item.move;
     }
 }
