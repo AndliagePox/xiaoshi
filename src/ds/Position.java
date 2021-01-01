@@ -14,6 +14,9 @@ public class Position {
     private final List<Piece> redPieces = new ArrayList<>();
     private final List<Piece> blackPieces = new ArrayList<>();
 
+    private Piece redKing;
+    private Piece blackKing;
+
     public Position(String fen) {
         if (fen.equals("startpos")) {
             fen = "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1";
@@ -37,8 +40,14 @@ public class Position {
                     board[i][j] = piece;
                     if (piece.belongBlack()) {
                         blackPieces.add(piece);
+                        if (piece.type == PieceType.KING) {
+                            blackKing = piece;
+                        }
                     } else {
                         redPieces.add(piece);
+                        if (piece.type == PieceType.KING) {
+                            redKing = piece;
+                        }
                     }
                     j++;
                 }
@@ -57,6 +66,12 @@ public class Position {
         Piece piece = board[fx][fy];
         board[fx][fy] = null;
         if (board[tx][ty] != null) {
+            if (board[tx][ty] == redKing) {
+                redKing = null;
+            }
+            if (board[tx][ty] == blackKing) {
+                blackKing = null;
+            }
             redPieces.remove(board[tx][ty]);
             blackPieces.remove(board[tx][ty]);
         }
@@ -89,6 +104,7 @@ public class Position {
         int cx = piece.at.x;
         int cy = piece.at.y;
         List<Location> locations = new ArrayList<>();
+        if (getKing(cur) == null) return locations;
         if (piece.type == PieceType.KING) {
             Piece pk = null;
             if (piece.belongBlack()) {
@@ -328,6 +344,14 @@ public class Position {
     private Player anotherPlayer() {
         if (cur == Player.BLACK) return Player.RED;
         else return Player.BLACK;
+    }
+
+    private Piece getKing(Player player) {
+        if (player == Player.BLACK) {
+            return blackKing;
+        } else {
+            return redKing;
+        }
     }
 
     public Player currentPlayer() {
