@@ -7,6 +7,7 @@ package bmg;
 
 import base.Configuration;
 import ds.Move;
+import ds.Player;
 import ds.Position;
 import mlg.MLGFactory;
 
@@ -46,6 +47,14 @@ public class ABSearchBMG extends EvaluatorBMG {
     private Result abSearch(Position position, Result a, Result b, int depth) {
         Move bestMove = null;
         Result bestResult = new Result(0, new LinkedList<>());
+
+        Player winner = position.winner();
+        if (winner != null) {
+            nodes++;
+            bestResult.score = winner == position.currentPlayer() ? 50002 - depth : depth - 50002;
+            return bestResult;
+        }
+
         if (depth == 0) {
             nodes++;
             bestResult.score = evaluator.evaluate(position);

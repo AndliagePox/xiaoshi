@@ -112,7 +112,6 @@ public class Position {
         int cx = piece.at.x;
         int cy = piece.at.y;
         List<Location> locations = new ArrayList<>();
-        if (getKing(cur) == null) return locations;
         if (piece.type == PieceType.KING) {
             Piece pk = null;
             if (piece.belongBlack()) {
@@ -354,12 +353,14 @@ public class Position {
         else return Player.BLACK;
     }
 
-    private Piece getKing(Player player) {
-        if (player == Player.BLACK) {
-            return blackKing;
-        } else {
-            return redKing;
+    public Player winner() {
+        if (redKing != null && blackKing == null) {
+            return Player.RED;
         }
+        if (redKing == null && blackKing != null) {
+            return Player.BLACK;
+        }
+        return null;
     }
 
     public Player currentPlayer() {
