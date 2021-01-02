@@ -18,6 +18,8 @@ abstract public class BMGFactory {
                 return new EatBMG(position);
             case "bf-search":
                 return new BFSearchBMG(position);
+            case "ab-search":
+                return new ABSearchBMG(position);
             default:
                 throw new RuntimeException("Invalid bestmove generator type [" + bmgType + "].");
         }
