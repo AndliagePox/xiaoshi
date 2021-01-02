@@ -53,4 +53,8 @@ public class Configuration {
     public static String getComboList() {
         return map.get("combo-list");
     }
+
+    public static String getMoveListType() {
+        return map.get("move-list-type");
+    }
 }

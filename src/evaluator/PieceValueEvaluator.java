@@ -10,6 +10,8 @@ import ds.Player;
 import ds.Position;
 
 public class PieceValueEvaluator extends BaseEvaluator {
+    PieceValueEvaluator() {}
+
     @Override
     public int evaluate(Position position) {
         int sc = 0;

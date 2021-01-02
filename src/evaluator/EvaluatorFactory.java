@@ -8,14 +8,24 @@ package evaluator;
 import base.Configuration;
 
 abstract public class EvaluatorFactory {
-    public static Evaluator createEvaluator() {
-        String evaluateType = Configuration.getEvaluateType();
-        if (evaluateType.equals("piece-value")) {
-            return new PieceValueEvaluator();
-        } else if (evaluateType.equals("combo")) {
-            return new ComboEvaluator(Configuration.getComboList());
-        } else {
-            throw new RuntimeException("Invalid evaluate type [" + evaluateType + "].");
+    private static final Evaluator evaluator = createEvaluatorByString(Configuration.getEvaluateType());
+
+    public static Evaluator getEvaluator() {
+        return evaluator;
+    }
+
+    static Evaluator createEvaluatorByString(String s) {
+        switch (s) {
+            case "piece-value":
+                return new PieceValueEvaluator();
+            case "combo":
+                return new ComboEvaluator(Configuration.getComboList());
+            case "knight-move":
+                return new KnightMoveEvaluator();
+            case "rook-move":
+                return new RookMoveEvaluator();
+            default:
+                throw new RuntimeException("Invalid evaluate type [" + s + "].");
         }
     }
 }

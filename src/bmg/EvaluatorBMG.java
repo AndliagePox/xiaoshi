@@ -14,6 +14,6 @@ abstract public class EvaluatorBMG extends BaseBMG {
 
     public EvaluatorBMG(Position position) {
         super(position);
-        evaluator = EvaluatorFactory.createEvaluator();
+        evaluator = EvaluatorFactory.getEvaluator();
     }
 }

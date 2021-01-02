@@ -12,6 +12,8 @@ import ds.Position;
 import java.util.List;
 
 public class KnightMoveEvaluator extends BaseEvaluator {
+    KnightMoveEvaluator() {}
+
     @Override
     public int evaluate(Position position) {
         int sc = 0;

@@ -12,6 +12,8 @@ import ds.Position;
 import java.util.List;
 
 public class RookMoveEvaluator extends BaseEvaluator {
+    RookMoveEvaluator() {}
+
     @Override
     public int evaluate(Position position) {
         int sc = 0;

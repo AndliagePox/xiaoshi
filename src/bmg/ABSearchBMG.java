@@ -6,10 +6,9 @@
 package bmg;
 
 import base.Configuration;
-import ds.Location;
 import ds.Move;
-import ds.Piece;
 import ds.Position;
+import mlg.MLGFactory;
 
 import java.util.LinkedList;
 
@@ -53,18 +52,15 @@ public class ABSearchBMG extends EvaluatorBMG {
             return bestResult;
         }
 
-        for (Piece piece: position.getCurrentPieces()) {
-            for (Location location: position.canMoveLocations(piece)) {
-                Move move = new Move(piece.at, location);
-                Result next = abSearch(position.nextMove(move), b.reverse(), a.reverse(), depth - 1).reverse();
-                if (next.score >= b.score) {
-                    b.moveList.addFirst(move);
-                    return b;
-                }
-                if (next.score > a.score) {
-                    bestMove = move;
-                    a = next;
-                }
+        for (Move move: MLGFactory.getMLG().generateMoveList(position)) {
+            Result next = abSearch(position.nextMove(move), b.reverse(), a.reverse(), depth - 1).reverse();
+            if (next.score >= b.score) {
+                b.moveList.addFirst(move);
+                return b;
+            }
+            if (next.score > a.score) {
+                bestMove = move;
+                a = next;
             }
         }
         a.moveList.addFirst(bestMove);

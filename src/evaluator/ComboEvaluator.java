@@ -13,20 +13,10 @@ import java.util.List;
 public class ComboEvaluator extends BaseEvaluator {
     private final List<Evaluator> evaluators = new ArrayList<>();
 
-    public ComboEvaluator(String s) {
+    ComboEvaluator(String s) {
         String[] evaluatorsType = s.split(",");
         for (String type: evaluatorsType) {
-            switch (type) {
-                case "piece-value":
-                    evaluators.add(new PieceValueEvaluator());
-                    break;
-                case "knight-move":
-                    evaluators.add(new KnightMoveEvaluator());
-                    break;
-                case "rook-move":
-                    evaluators.add(new RookMoveEvaluator());
-                    break;
-            }
+            evaluators.add(EvaluatorFactory.createEvaluatorByString(type));
         }
     }
 
