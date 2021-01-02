@@ -14,16 +14,28 @@ import ds.Position;
 import java.util.LinkedList;
 
 public class ABSearchBMG extends EvaluatorBMG {
+    private int nodes;
+
     public ABSearchBMG(Position position) {
         super(position);
     }
 
     @Override
     public Move bestMove() {
+        nodes = 0;
         int depth = Configuration.getSearchDepth();
-        Result result = abSearch(position, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+        long time = System.currentTimeMillis();
+        Result result = abSearch(
+                position,
+                new Result(-100000, new LinkedList<>()),
+                new Result(100000, new LinkedList<>()),
+                depth
+        );
+        time = System.currentTimeMillis() - time;
         StringBuilder sb = new StringBuilder("info depth ");
-        sb.append(depth).append(" score ").append(result.score).append(" pv ");
+        sb.append(depth).append(" score ").append(result.score);
+        sb.append(" time ").append(time);
+        sb.append(" nodes ").append(nodes).append(" pv ");
         for (Move move: result.moveList) {
             sb.append(move).append(' ');
         }
@@ -32,49 +44,31 @@ public class ABSearchBMG extends EvaluatorBMG {
         return result.moveList.getFirst();
     }
 
-    private Result abSearch(Position position, int depth, int a, int b, boolean self) {
+    private Result abSearch(Position position, Result a, Result b, int depth) {
         Move bestMove = null;
         Result bestResult = new Result(0, new LinkedList<>());
         if (depth == 0) {
+            nodes++;
             bestResult.score = evaluator.evaluate(position);
             return bestResult;
         }
 
-        if (self) {
-            selfSearch: for (Piece piece: position.getCurrentPieces()) {
-                for (Location location: position.canMoveLocations(piece)) {
-                    Move move = new Move(piece.at, location);
-                    Result next = abSearch(position.nextMove(move), depth - 1, a, b, false);
-                    if (next.score > a) {
-                        a = next.score;
-                        bestMove = move;
-                        bestResult = next;
-                    }
-                    if (b <= a) {
-                        break selfSearch;
-                    }
+        for (Piece piece: position.getCurrentPieces()) {
+            for (Location location: position.canMoveLocations(piece)) {
+                Move move = new Move(piece.at, location);
+                Result next = abSearch(position.nextMove(move), b.reverse(), a.reverse(), depth - 1).reverse();
+                if (next.score >= b.score) {
+                    b.moveList.addFirst(move);
+                    return b;
+                }
+                if (next.score > a.score) {
+                    bestMove = move;
+                    a = next;
                 }
             }
-            bestResult.score = a;
-        } else {
-            antiSearch: for (Piece piece: position.getCurrentPieces()) {
-                for (Location location: position.canMoveLocations(piece)) {
-                    Move move = new Move(piece.at, location);
-                    Result next = abSearch(position.nextMove(move), depth - 1, a, b, true);
-                    if (next.score < b) {
-                        b = next.score;
-                        bestMove = move;
-                        bestResult = next;
-                    }
-                    if (b <= a) {
-                        break antiSearch;
-                    }
-                }
-            }
-            bestResult.score = b;
         }
-        bestResult.moveList.addFirst(bestMove);
-        return bestResult;
+        a.moveList.addFirst(bestMove);
+        return a;
     }
 
     static class Result {
@@ -84,6 +78,10 @@ public class ABSearchBMG extends EvaluatorBMG {
         public Result(int score, LinkedList<Move> moveList) {
             this.score = score;
             this.moveList = moveList;
+        }
+
+        public Result reverse() {
+            return new Result(-score, new LinkedList<>(moveList));
         }
     }
 }
