@@ -18,7 +18,13 @@ public class KnightMoveEvaluator extends BaseEvaluator {
         List<Piece> pieces = position.getCurrentPieces();
         for (Piece piece: pieces) {
             if (piece.type == PieceType.KNIGHT) {
-                sc += 5 * position.canMoveLocations(piece).size();
+                sc += 10 * position.canMoveLocations(piece).size();
+            }
+        }
+        List<Piece> antiPieces = position.getAntiPieces();
+        for (Piece piece: antiPieces) {
+            if (piece.type == PieceType.KNIGHT) {
+                sc -= 10 * position.canMoveLocations(piece).size();
             }
         }
         return sc;

@@ -46,7 +46,7 @@ public class PieceValueEvaluator extends BaseEvaluator {
                         sc = 200;
                     }
                 } else {
-                    if (piece.at.x < 6) {
+                    if (piece.at.x < 5) {
                         sc = 200;
                     }
                 }

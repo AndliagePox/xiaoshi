@@ -94,6 +94,14 @@ public class Position {
         }
     }
 
+    public List<Piece> getAntiPieces() {
+        if (cur == Player.BLACK) {
+            return redPieces;
+        } else {
+            return blackPieces;
+        }
+    }
+
     public Position nextMove(Move move) {
         Position next = new Position(this.toString());
         next.applyMove(move);
@@ -144,7 +152,7 @@ public class Position {
                 boolean f = false;
                 int s = Math.min(cx, pk.at.x) + 1;
                 int e = Math.max(cx, pk.at.x) - 1;
-                for (int x = s; x < e; x++) {
+                for (int x = s; x <= e; x++) {
                     if (board[x][cy] != null) {
                         f = true;
                         break;

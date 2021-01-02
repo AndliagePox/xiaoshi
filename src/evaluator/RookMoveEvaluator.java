@@ -21,6 +21,12 @@ public class RookMoveEvaluator extends BaseEvaluator {
                 sc += 5 * position.canMoveLocations(piece).size();
             }
         }
+        List<Piece> antiPieces = position.getAntiPieces();
+        for (Piece piece: antiPieces) {
+            if (piece.type == PieceType.ROOK) {
+                sc -= 5 * position.canMoveLocations(piece).size();
+            }
+        }
         return sc;
     }
 }
