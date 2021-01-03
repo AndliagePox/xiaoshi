@@ -11,7 +11,11 @@ import ds.Position;
 abstract public class BMGFactory {
     public static BestMoveGenerator createBMG(Position position) {
         String bmgType = Configuration.getBestMoveType();
-        switch (bmgType) {
+        return createBMGByString(bmgType, position);
+    }
+
+    static BestMoveGenerator createBMGByString(String s, Position position) {
+        switch (s) {
             case "rand":
                 return new RandBMG(position);
             case "eat":
@@ -20,8 +24,10 @@ abstract public class BMGFactory {
                 return new BFSearchBMG(position);
             case "ab-search":
                 return new ABSearchBMG(position);
+            case "v3-search":
+                return new V3SearchBMG(position);
             default:
-                throw new RuntimeException("Invalid bestmove generator type [" + bmgType + "].");
+                throw new RuntimeException("Invalid bestmove generator type [" + s + "].");
         }
     }
 }

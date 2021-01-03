@@ -15,12 +15,15 @@ public class MLGFactory {
     }
 
     static MoveListGenerator createMLGByString(String s) {
-        if (s.equals("default")) {
-            return new DefaultMLG();
-        } else if (s.equals("eat")) {
-            return new EatMLG();
-        } else {
-            throw new RuntimeException("Invalid move list generator type [" + s + "].");
+        switch (s) {
+            case "default":
+                return new DefaultMLG();
+            case "eat":
+                return new EatMLG();
+            case "score":
+                return new ScoreMLG();
+            default:
+                throw new RuntimeException("Invalid move list generator type [" + s + "].");
         }
     }
 }

@@ -9,12 +9,11 @@ import base.Configuration;
 import ds.Move;
 import ds.Player;
 import ds.Position;
-import mlg.MLGFactory;
 
 import java.util.LinkedList;
 
 public class ABSearchBMG extends EvaluatorBMG {
-    private int nodes;
+    protected int nodes;
 
     public ABSearchBMG(Position position) {
         super(position);
@@ -61,7 +60,7 @@ public class ABSearchBMG extends EvaluatorBMG {
             return bestResult;
         }
 
-        for (Move move: MLGFactory.getMLG().generateMoveList(position)) {
+        for (Move move: mlg.generateMoveList(position)) {
             Result next = abSearch(position.nextMove(move), b.reverse(), a.reverse(), depth - 1).reverse();
             if (next.score >= b.score) {
                 b.moveList.addFirst(move);
