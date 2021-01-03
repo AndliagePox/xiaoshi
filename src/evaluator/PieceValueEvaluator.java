@@ -32,26 +32,17 @@ public class PieceValueEvaluator extends BaseEvaluator {
                 break;
             case ADVISOR:
             case BISHOP:
-                sc = 150;
+                sc = 125;
                 break;
             case KNIGHT:
             case CANNON:
-                sc = 500;
+                sc = 400;
                 break;
             case ROOK:
-                sc = 1000;
+                sc = 800;
                 break;
             case PAWN:
                 sc = 100;
-                if (piece.belongBlack()) {
-                    if (piece.at.x > 4) {
-                        sc = 150;
-                    }
-                } else {
-                    if (piece.at.x < 5) {
-                        sc = 150;
-                    }
-                }
                 break;
         }
         return sc;

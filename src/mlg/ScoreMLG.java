@@ -47,13 +47,13 @@ public class ScoreMLG extends BaseMLG implements IteratorMLG, CutOffMLG {
         for (Move move: moveList) {
             int sc = 0;
             if (lastResultMoveList != null && lastResultMoveList.contains(move)) {
-                sc += 1000;
+                sc += 2000;
             }
             if (cutOffSet.contains(move)) {
                 sc += 500;
             }
             if (position.getBoard()[move.to.x][move.to.y] != null) {
-                sc += 200;
+                sc += 1000;
             }
             moveScore.put(move, sc);
         }

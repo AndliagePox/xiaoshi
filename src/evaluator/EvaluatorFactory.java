@@ -24,6 +24,8 @@ abstract public class EvaluatorFactory {
                 return new KnightMoveEvaluator();
             case "rook-move":
                 return new RookMoveEvaluator();
+            case "location":
+                return new LocationEvaluator();
             default:
                 throw new RuntimeException("Invalid evaluate type [" + s + "].");
         }
