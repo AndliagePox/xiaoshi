@@ -13,9 +13,12 @@ import ds.Position;
 
 import java.util.LinkedList;
 
+/**
+ * 暴力搜索，深度优先搜索，不好使
+ */
 public class BFSearchBMG extends EvaluatorBMG {
 
-    public BFSearchBMG(Position position) {
+    BFSearchBMG(Position position) {
         super(position);
     }
 

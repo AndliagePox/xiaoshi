@@ -20,7 +20,7 @@ import java.util.Map;
 public class FenTextBook extends BaseBook {
     private final Map<Position, List<Item>> map = new HashMap<>();
 
-    public FenTextBook() {
+    FenTextBook() {
         try {
             String line;
             BufferedReader reader = new BufferedReader(new FileReader("book.txt"));

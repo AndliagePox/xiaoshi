@@ -12,6 +12,10 @@ import ds.Position;
 
 import java.util.List;
 
+/**
+ * 吃子着法生成器，扫描走法，能吃就吃最大的，不能吃就随机走子
+ * 最早的实验着法生成器之一，留着玩。
+ */
 public class EatBMG extends EvaluatorBMG {
     public EatBMG(Position position) {
         super(position);

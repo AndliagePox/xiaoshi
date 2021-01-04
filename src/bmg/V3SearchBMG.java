@@ -14,6 +14,10 @@ import mlg.IteratorMLG;
 
 import java.util.LinkedList;
 
+/**
+ * 第三版搜索生成器，基础还是Alpha-Beta搜索，采用了迭代搜索和截断启发搜索。
+ * 要求MLG必须支持迭代启发搜索和截断启发搜索(即实现IteratorMLG和CutOffMLG接口)。
+ */
 public class V3SearchBMG extends ABSearchBMG {
     private final IteratorMLG iteratorMLG = (IteratorMLG) mlg;
     private final CutOffMLG cutOffMLG = (CutOffMLG) mlg;
@@ -25,7 +29,10 @@ public class V3SearchBMG extends ABSearchBMG {
     @Override
     public Move bestMove() {
         nodes = 0;
+
+        // 清除历史截断移动，这玩意还是该一次一表的
         cutOffMLG.clearCutOffMoves();
+
         int depth = Configuration.getSearchDepth();
         long time, totalTime = System.currentTimeMillis();
         Result result = null;
@@ -37,7 +44,10 @@ public class V3SearchBMG extends ABSearchBMG {
                     new Result(100000, new LinkedList<>()),
                     i
             );
+
+            // 设置上层搜索结果，加速下一层搜索
             iteratorMLG.setLastResultMoveList(result.moveList);
+
             time = System.currentTimeMillis() - time;
             StringBuilder sb = new StringBuilder("info depth ");
             sb.append(i).append(" score ").append(result.score);
@@ -77,11 +87,13 @@ public class V3SearchBMG extends ABSearchBMG {
             Result next = search(position.nextMove(move), b.reverse(), a.reverse(), depth - 1).reverse();
             if (next.score >= b.score) {
                 b.moveList.addFirst(move);
+                // 发生截断，添加着法
                 cutOffMLG.add(move);
                 return b;
             }
             if (next.score > a.score) {
                 bestMove = move;
+                // 发生截断，添加着法
                 cutOffMLG.add(move);
                 a = next;
             }

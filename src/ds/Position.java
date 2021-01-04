@@ -8,15 +8,36 @@ package ds;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 棋局，描述当前局面
+ */
 public class Position {
+    /**
+     * 到哪方走棋
+     */
     private Player cur;
+
+    /**
+     * 棋盘
+     */
     private final Piece[][] board = new Piece[10][9];
+
+    /**
+     * 红黑双方的子
+     */
     private final List<Piece> redPieces = new ArrayList<>();
     private final List<Piece> blackPieces = new ArrayList<>();
 
+    /**
+     * 将帅，用于判定胜负
+     */
     private Piece redKing;
     private Piece blackKing;
 
+    /**
+     * 通过fen串创建局面，fen串规则参阅：http://www.xqbase.com/protocol/cchess_fen.htm
+     * @param fen fen串
+     */
     public Position(String fen) {
         if (fen.equals("startpos")) {
             fen = "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1";
@@ -57,6 +78,10 @@ public class Position {
         }
     }
 
+    /**
+     * 进行某个移动
+     * @param move 进行的移动
+     */
     public void applyMove(Move move) {
         int fx = move.from.x;
         int fy = move.from.y;
@@ -102,12 +127,22 @@ public class Position {
         }
     }
 
+    /**
+     * 进行下一步移动后的棋局
+     * @param move 进行的移动
+     * @return 返回新的棋局，本棋局进行move移动动后的棋局
+     */
     public Position nextMove(Move move) {
         Position next = new Position(this.toString());
         next.applyMove(move);
         return next;
     }
 
+    /**
+     * 寻找一个棋子所有合法的可移动位置
+     * @param piece 棋子
+     * @return 位置列表
+     */
     public List<Location> canMoveLocations(Piece piece) {
         int cx = piece.at.x;
         int cy = piece.at.y;

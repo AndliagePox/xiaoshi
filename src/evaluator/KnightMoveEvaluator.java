@@ -11,6 +11,9 @@ import ds.Position;
 
 import java.util.List;
 
+/**
+ * 马的灵活性评估器，马的可移动列表每多一个位置+10分
+ */
 public class KnightMoveEvaluator extends BaseEvaluator {
     KnightMoveEvaluator() {}
 

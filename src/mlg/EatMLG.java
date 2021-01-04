@@ -11,6 +11,9 @@ import ds.Position;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * 优先吃子列表生成器
+ */
 public class EatMLG extends BaseMLG {
     EatMLG() {}
 

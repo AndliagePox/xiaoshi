@@ -3,7 +3,6 @@
  * Date: 2020-12-20
  */
 
-import base.Configuration;
 import bmg.BMGFactory;
 import bmg.BestMoveGenerator;
 import base.Logger;
@@ -23,10 +22,7 @@ public class Main {
         String command;
         Logger logger = new Logger();
         Position position = new Position("startpos");
-        Book book = null;
-        if (Configuration.enableBook()) {
-            book = BookFactory.createBook();
-        }
+        Book book = BookFactory.getBook();
 
         while (!(command = sc.nextLine()).equals("quit")) {
             logger.write(command);

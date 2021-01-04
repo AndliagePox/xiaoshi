@@ -9,6 +9,9 @@ import ds.Position;
 import evaluator.Evaluator;
 import evaluator.EvaluatorFactory;
 
+/**
+ * 带局面评估器的着法生成器，一般都会带的，除非……
+ */
 abstract public class EvaluatorBMG extends BaseBMG {
     protected Evaluator evaluator;
 

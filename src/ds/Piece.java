@@ -5,10 +5,30 @@
 
 package ds;
 
+/**
+ * 棋子
+ */
 public class Piece {
+    /**
+     * 用字母表示
+     * 还是可参阅：http://www.xqbase.com/protocol/cchess_move.htm
+     * 小写表示黑方，大写表示红方
+     */
     public char c;
+
+    /**
+     * 属于哪个玩家
+     */
     public Player belong;
+
+    /**
+     * 棋子类型
+     */
     public PieceType type;
+
+    /**
+     * 棋子所在位置
+     */
     public Location at;
 
     public Piece(char c, int x, int y) {

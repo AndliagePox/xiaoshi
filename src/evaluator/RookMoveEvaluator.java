@@ -11,6 +11,9 @@ import ds.Position;
 
 import java.util.List;
 
+/**
+ * 车的灵活性评估器，车的可移动列表每多一个位置+5分
+ */
 public class RookMoveEvaluator extends BaseEvaluator {
     RookMoveEvaluator() {}
 

@@ -11,7 +11,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 配置类
+ * 看起来挺通俗易懂的，就不多介绍了
+ */
 public class Configuration {
+    /**
+     * 配置HashMap，初始化时读取文件，put各配置项
+     */
     public static Map<String, String> map = new HashMap<>();
 
     static {
@@ -29,6 +36,10 @@ public class Configuration {
             e.printStackTrace();
         }
     }
+
+    /*
+    然后通过下面这一众方法获取配置的值
+     */
 
     public static String getBestMoveType() {
         return map.get("bestmove-type");

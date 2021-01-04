@@ -8,6 +8,9 @@ package bmg;
 import base.Configuration;
 import ds.Position;
 
+/**
+ * BMG工厂，调用createBMG根据配置创建对应的BMG。
+ */
 abstract public class BMGFactory {
     public static BestMoveGenerator createBMG(Position position) {
         String bmgType = Configuration.getBestMoveType();

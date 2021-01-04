@@ -12,10 +12,13 @@ import ds.Position;
 
 import java.util.LinkedList;
 
+/**
+ * 使用Alpha-Beta搜索算法搜索
+ */
 public class ABSearchBMG extends EvaluatorBMG {
     protected int nodes;
 
-    public ABSearchBMG(Position position) {
+    ABSearchBMG(Position position) {
         super(position);
     }
 
@@ -44,6 +47,9 @@ public class ABSearchBMG extends EvaluatorBMG {
     }
 
     private Result abSearch(Position position, Result a, Result b, int depth) {
+        /*
+         其实node++的统计应该放在这里统计，不过历史版本嘛，不改了。
+         */
         Move bestMove = null;
         Result bestResult = new Result(0, new LinkedList<>());
 
@@ -61,6 +67,11 @@ public class ABSearchBMG extends EvaluatorBMG {
         }
 
         for (Move move: mlg.generateMoveList(position)) {
+            /*
+            next = -abSearch(nextMove, -beta, -alpha);
+            比传统判当前是最大还是最小能少写很多代码，本质上没有区别。
+            至于难理解的程度，远没有这个搜索算法本身难理解，对吧。
+             */
             Result next = abSearch(position.nextMove(move), b.reverse(), a.reverse(), depth - 1).reverse();
             if (next.score >= b.score) {
                 b.moveList.addFirst(move);

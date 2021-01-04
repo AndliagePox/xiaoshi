@@ -15,11 +15,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract public class BaseBMG implements BestMoveGenerator {
+    /**
+     * 当前局面
+     */
     protected Position position;
+
+    /**
+     * 当前玩家
+     */
     protected Player cur;
+
+    /**
+     * 当前局面的棋盘
+     */
     protected Piece[][] board;
+
+    /**
+     * 红黑双方的棋子列表
+     */
     protected List<Piece> redPieces;
     protected List<Piece> blackPieces;
+
+    /**
+     * 着法列表生成器
+     */
     protected MoveListGenerator mlg;
 
     public BaseBMG(Position position) {

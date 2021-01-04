@@ -6,10 +6,14 @@
 package mlg;
 
 import ds.Move;
+import ds.Piece;
 import ds.Position;
 
 import java.util.*;
 
+/**
+ * 积分着法列表生成器，类似于组合评估器，实现了IteratorMLG和CutOffMLG，可以支持迭代启发搜索和截断启发搜索
+ */
 public class ScoreMLG extends BaseMLG implements IteratorMLG, CutOffMLG {
     private Position position;
     private List<Move> moveList;
@@ -46,15 +50,37 @@ public class ScoreMLG extends BaseMLG implements IteratorMLG, CutOffMLG {
     private void calcScore() {
         for (Move move: moveList) {
             int sc = 0;
+
+            // 最优先的是上次搜索的结果
             if (lastResultMoveList != null && lastResultMoveList.contains(move)) {
-                sc += 2000;
+                sc += 5000;
             }
+
+            // 其次是子着法
+            Piece tar;
+            if ((tar = position.getBoard()[move.to.x][move.to.y]) != null) {
+                switch (tar.type) {
+                    case KING:
+                        sc += 30000;
+                        break;
+                    case KNIGHT:
+                    case CANNON:
+                        sc += 500;
+                        break;
+                    case ROOK:
+                        sc += 1000;
+                        break;
+                    default:
+                        // 但吃小子并不优于截断着法
+                        sc += 200;
+                }
+            }
+
+            // 然后是产生截断的着法
             if (cutOffSet.contains(move)) {
-                sc += 500;
+                sc += 400;
             }
-            if (position.getBoard()[move.to.x][move.to.y] != null) {
-                sc += 1000;
-            }
+
             moveScore.put(move, sc);
         }
     }

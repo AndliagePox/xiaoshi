@@ -10,6 +10,10 @@ import ds.Position;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 组合评估器
+ * 将多种评估器的分数相加，得到最终评分
+ */
 public class ComboEvaluator extends BaseEvaluator {
     private final List<Evaluator> evaluators = new ArrayList<>();
 

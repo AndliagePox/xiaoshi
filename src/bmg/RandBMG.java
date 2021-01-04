@@ -14,6 +14,10 @@ import ds.Position;
 
 import java.util.List;
 
+/**
+ * 随机着法生成器，她还真就是乱走的。
+ * 最早的实验着法生成器之一，留着玩。
+ */
 public class RandBMG extends BaseBMG {
 
     public RandBMG(Position position) {

@@ -5,8 +5,17 @@
 
 package ds;
 
+/**
+ * 移动
+ */
 public class Move {
+    /**
+     * 从哪里来
+     */
     public Location from;
+    /**
+     * 到哪里去
+     */
     public Location to;
 
     public Move(Location from, Location to) {

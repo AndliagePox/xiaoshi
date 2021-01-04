@@ -9,6 +9,9 @@ import ds.Piece;
 import ds.Player;
 import ds.Position;
 
+/**
+ * 子力价值评估器，每种棋子都有对应的分值
+ */
 public class PieceValueEvaluator extends BaseEvaluator {
     PieceValueEvaluator() {}
 
@@ -32,7 +35,8 @@ public class PieceValueEvaluator extends BaseEvaluator {
                 break;
             case ADVISOR:
             case BISHOP:
-                sc = 125;
+            case PAWN:
+                sc = 100;
                 break;
             case KNIGHT:
             case CANNON:
@@ -40,9 +44,6 @@ public class PieceValueEvaluator extends BaseEvaluator {
                 break;
             case ROOK:
                 sc = 800;
-                break;
-            case PAWN:
-                sc = 100;
                 break;
         }
         return sc;

@@ -8,12 +8,23 @@ package book;
 import base.Configuration;
 
 abstract public class BookFactory {
-    public static Book createBook() {
-        String bookType = Configuration.getBookType();
-        if (bookType.equals("text")) {
+    private static Book book = null;
+
+    static {
+        if (Configuration.enableBook()) {
+            book = createBookByString(Configuration.getBookType());
+        }
+    }
+
+    public static Book getBook() {
+        return book;
+    }
+
+    public static Book createBookByString(String s) {
+        if (s.equals("text")) {
             return new FenTextBook();
         } else {
-            throw new RuntimeException("Invalid book type [" + bookType + "].");
+            throw new RuntimeException("Invalid book type [" + s + "].");
         }
     }
 }

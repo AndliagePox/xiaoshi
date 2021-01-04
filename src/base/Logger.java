@@ -6,6 +6,9 @@ package base;
 
 import java.io.*;
 
+/**
+ * 日志类
+ */
 public class Logger {
     private BufferedWriter bw;
 

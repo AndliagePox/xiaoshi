@@ -4,6 +4,13 @@
  */
 package ds;
 
+/**
+ * 位置，指棋盘上的一个点
+ * 用黑上红下的棋盘来说
+ * xy表示法左上角为(0, 0)右下角为(9, 8)，方便程序编写
+ * abc表示法左下角为a0，右上角为i9，是协议支持的表示法
+ * 参阅：http://www.xqbase.com/protocol/cchess_move.htm
+ */
 public class Location {
     public int x, y;
 

@@ -13,6 +13,9 @@ import ds.Position;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 默认着法列表生成器，只扫描着法列表，不排序
+ */
 public class DefaultMLG extends BaseMLG {
     DefaultMLG() {}
 

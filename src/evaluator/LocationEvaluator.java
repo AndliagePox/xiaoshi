@@ -10,7 +10,18 @@ import ds.PieceType;
 import ds.Player;
 import ds.Position;
 
+/**
+ * 位置分数评估器
+ * 每种棋子在不同时期的不同位置有不同的分数
+ */
 public class LocationEvaluator extends BaseEvaluator {
+    /**
+     * 下面这几个数组的命名规则是：
+     * LV_[MID/END]_[TYPE]_[ATK/DEF]
+     * MID/END表示开中局还是残局
+     * TYPE是棋子类型，其中兵将、士相可以共用一张表，它们的合法位置不重合
+     * ATK/DEF表示进攻状态还是防御状态，攻防应该有不同的评分，防御时士相作用大而进攻时作用小
+     */
     private static final int[][] LV_MID_PAWN_KING_ATK = {
             {9, 9, 9, 11, 13, 11, 9, 9, 9},
             {39, 49, 69, 84, 89, 84, 69, 49, 39},
@@ -167,6 +178,16 @@ public class LocationEvaluator extends BaseEvaluator {
             {100, 100, 100, 104, 106, 104, 100, 100, 100}
     };
 
+    /**
+     * 中局/残局子力阈值
+     */
+    private static final int MID_END_BOUND = 12;
+
+    /**
+     * 进攻子力阈值
+     */
+    private static final int ATK_DEF_BOUND = 3;
+
     LocationEvaluator() {}
 
     @Override
@@ -188,6 +209,9 @@ public class LocationEvaluator extends BaseEvaluator {
     private int[][] selectTable(Position position, Piece piece) {
         int count = 0, redAtk = 0, blackAtk = 0, selfAtk, antiAtk;
 
+        /*
+        统计本方剩余子力，车6分马炮3分其他1分，小于MID_END_BOUND认为是残局阶段
+         */
         for (Piece p: position.getCurrentPieces()) {
             if (p.type == PieceType.ROOK) {
                 count += 6;
@@ -198,6 +222,9 @@ public class LocationEvaluator extends BaseEvaluator {
             }
         }
 
+        /*
+        统计双方进攻情况，看过河子力，车马2分，炮兵1分，大于ATK_DEF_BOUND认为在进攻状态
+         */
         for (Piece p: position.getRedPieces()) {
             if (p.at.x < 5) {
                 if (p.type == PieceType.ROOK || p.type == PieceType.KNIGHT) {
@@ -224,7 +251,7 @@ public class LocationEvaluator extends BaseEvaluator {
             antiAtk = blackAtk;
         }
 
-        if (count < 18) {
+        if (count < MID_END_BOUND) {
             return getTable_IDEA(piece, selfAtk, antiAtk, LV_END_CANNON, LV_END_KNIGHT, LV_END_ROOK, LV_END_PAWN_KING_ATK, LV_END_PAWN_KING_DEF);
         } else {
             return getTable_IDEA(piece, selfAtk, antiAtk, LV_MID_CANNON, LV_MID_KNIGHT, LV_MID_ROOK, LV_MID_PAWN_KING_ATK, LV_MID_PAWN_KING_DEF);
@@ -239,9 +266,9 @@ public class LocationEvaluator extends BaseEvaluator {
         } else if (piece.type == PieceType.ROOK) {
             return lvEndRook;
         } else if (piece.type == PieceType.KING || piece.type == PieceType.PAWN) {
-            return selfAtk > 4 ? lvEndPawnKingAtk : lvEndPawnKingDef;
+            return selfAtk > ATK_DEF_BOUND ? lvEndPawnKingAtk : lvEndPawnKingDef;
         } else {
-            return antiAtk > 4 ? LV_ADVISOR_BISHOP_DEF : LV_ADVISOR_BISHOP_ATK;
+            return antiAtk > ATK_DEF_BOUND ? LV_ADVISOR_BISHOP_DEF : LV_ADVISOR_BISHOP_ATK;
         }
     }
 }
