@@ -403,12 +403,26 @@ public class Position {
         else return Player.BLACK;
     }
 
+    /**
+     * 判定胜负，条件是轮到自己走且能吃掉对方将
+     * 上个版本是判断将帅是否存活，该版本虽然降低了平时的搜索效率，但能在提前一层搜到杀棋，对后期残局提升很大
+     * @return 当前局面的胜利者，没有胜利者为null
+     */
     public Player winner() {
-        if (redKing != null && blackKing == null) {
-            return Player.RED;
-        }
-        if (redKing == null && blackKing != null) {
-            return Player.BLACK;
+        if (cur == Player.BLACK) {
+            for (Piece piece: blackPieces) {
+                if (piece.type == PieceType.ADVISOR || piece.type == PieceType.BISHOP) continue;
+                for (Location location: canMoveLocations(piece)) {
+                    if (redKing.at.equals(location)) return Player.BLACK;
+                }
+            }
+        } else {
+            for (Piece piece: redPieces) {
+                if (piece.type == PieceType.ADVISOR || piece.type == PieceType.BISHOP) continue;
+                for (Location location: canMoveLocations(piece)) {
+                    if (blackKing.at.equals(location)) return Player.RED;
+                }
+            }
         }
         return null;
     }

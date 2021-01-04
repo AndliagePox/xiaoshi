@@ -19,6 +19,7 @@ import java.util.LinkedList;
  * 要求MLG必须支持迭代启发搜索和截断启发搜索(即实现IteratorMLG和CutOffMLG接口)。
  */
 public class V3SearchBMG extends ABSearchBMG {
+    private int curDepth;
     private final IteratorMLG iteratorMLG = (IteratorMLG) mlg;
     private final CutOffMLG cutOffMLG = (CutOffMLG) mlg;
 
@@ -38,6 +39,7 @@ public class V3SearchBMG extends ABSearchBMG {
         Result result = null;
         for (int i = 1; i <= depth; i++) {
             time = System.currentTimeMillis();
+            curDepth = 0;
             result = search(
                     position,
                     new Result(-100000, new LinkedList<>()),
@@ -60,6 +62,10 @@ public class V3SearchBMG extends ABSearchBMG {
             }
             sb.deleteCharAt(sb.length() - 1);
             System.out.println(sb.toString());
+            long ct = System.currentTimeMillis() - totalTime;
+            if (i == depth && ct < 4000) {
+                depth++;
+            }
         }
         System.out.println("info total time " + (System.currentTimeMillis() - totalTime));
         if (result == null) return null;
@@ -73,7 +79,7 @@ public class V3SearchBMG extends ABSearchBMG {
 
         Player winner = position.winner();
         if (winner != null) {
-            bestResult.score = winner == position.currentPlayer() ? 50002 - depth : depth - 50002;
+            bestResult.score = winner == position.currentPlayer() ? 50000 - curDepth / 2 : curDepth / 2 - 50000;
             return bestResult;
         }
 
@@ -83,12 +89,15 @@ public class V3SearchBMG extends ABSearchBMG {
             return bestResult;
         }
 
+        curDepth++;
+
         for (Move move: mlg.generateMoveList(position)) {
             Result next = search(position.nextMove(move), b.reverse(), a.reverse(), depth - 1).reverse();
             if (next.score >= b.score) {
                 b.moveList.addFirst(move);
                 // 发生截断，添加着法
                 cutOffMLG.add(move);
+                curDepth--;
                 return b;
             }
             if (next.score > a.score) {
@@ -98,7 +107,9 @@ public class V3SearchBMG extends ABSearchBMG {
                 a = next;
             }
         }
+
         a.moveList.addFirst(bestMove);
+        curDepth--;
         return a;
     }
 }
