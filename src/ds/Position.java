@@ -128,6 +128,21 @@ public class Position {
     }
 
     /**
+     * 生成左右对称的棋局
+     * @return 新的棋局对象，与本对象局面左右对称
+     */
+    public Position symmetricalPosition() {
+        String s = this.toString();
+        StringBuilder sb = new StringBuilder();
+        for (String row: s.split(" ")[0].split("/")) {
+            sb.append(new StringBuilder(row).reverse()).append('/');
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(s.substring(s.indexOf(' ')));
+        return new Position(sb.toString());
+    }
+
+    /**
      * 进行下一步移动后的棋局
      * @param move 进行的移动
      * @return 返回新的棋局，本棋局进行move移动动后的棋局

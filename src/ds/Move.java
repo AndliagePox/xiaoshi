@@ -28,6 +28,16 @@ public class Move {
         this.to = new Location(s.substring(2));
     }
 
+    /**
+     * 生成左右对称的着法
+     * @return 新着法，与本着法左右对称
+     */
+    public Move symmetricalMove() {
+        Location sf = new Location(from.x, 8 - from.y);
+        Location st = new Location(to.x, 8 - to.y);
+        return new Move(sf, st);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

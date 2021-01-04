@@ -39,11 +39,22 @@ public class FenTextBook extends BaseBook {
 
     @Override
     public Move nextMove(Position position) {
+        /* 查找的是否是对称局面 */
+        boolean s = false;
+
         List<Item> list = map.get(position);
+        if (list == null) {
+            list = map.get(position.symmetricalPosition());
+            if (list != null) {
+                s = true;
+            }
+        }
         if (list == null) return null;
+
         Item item = list.get(Util.random(list.size()));
+        Move move = s ? item.move.symmetricalMove() : item.move;
         System.out.println("info book hit");
-        System.out.println("info depth 0 score " + item.score + " pv " + item.move);
-        return item.move;
+        System.out.println("info depth 0 score " + item.score + " pv " + move);
+        return move;
     }
 }

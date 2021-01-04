@@ -56,7 +56,7 @@ public class ScoreMLG extends BaseMLG implements IteratorMLG, CutOffMLG {
                 sc += 5000;
             }
 
-            // 其次是子着法
+            // 其次是吃子着法
             Piece tar;
             if ((tar = position.getBoard()[move.to.x][move.to.y]) != null) {
                 switch (tar.type) {
