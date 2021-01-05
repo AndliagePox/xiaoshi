@@ -163,7 +163,7 @@ public class Position {
         int cy = piece.at.y;
         List<Location> locations = new ArrayList<>();
         if (piece.type == PieceType.KING) {
-            Piece pk = null;
+            Piece pk;
             if (piece.belongBlack()) {
                 if (cx - 1 >= 0) {
                     checkForAdd(locations, cx - 1, cy);
@@ -171,12 +171,7 @@ public class Position {
                 if (cx + 1 <= 2) {
                     checkForAdd(locations, cx + 1, cy);
                 }
-                for (Piece p: redPieces) {
-                    if (p.type == PieceType.KING) {
-                        pk = p;
-                        break;
-                    }
-                }
+                pk = redKing;
             } else {
                 if (cx - 1 >= 7) {
                     checkForAdd(locations, cx - 1, cy);
@@ -184,32 +179,14 @@ public class Position {
                 if (cx + 1 <= 9) {
                     checkForAdd(locations, cx + 1, cy);
                 }
-                for (Piece p: blackPieces) {
-                    if (p.type == PieceType.KING) {
-                        pk = p;
-                        break;
-                    }
-                }
+                pk = blackKing;
             }
-            if (cy - 1 >= 3) {
-                checkForAdd(locations, cx, cy - 1);
+            int ty;
+            if ((ty = cy - 1) >= 3) {
+                addKingYMove_IDEA(cx, locations, pk, ty);
             }
-            if (cy + 1 <= 5) {
-                checkForAdd(locations, cx, cy + 1);
-            }
-            if (pk != null && pk.at.y == cy) {
-                boolean f = false;
-                int s = Math.min(cx, pk.at.x) + 1;
-                int e = Math.max(cx, pk.at.x) - 1;
-                for (int x = s; x <= e; x++) {
-                    if (board[x][cy] != null) {
-                        f = true;
-                        break;
-                    }
-                }
-                if (!f) {
-                    checkForAdd(locations, pk.at.x, cy);
-                }
+            if ((ty = cy + 1) <= 5) {
+                addKingYMove_IDEA(cx, locations, pk, ty);
             }
         } else if (piece.type == PieceType.ADVISOR) {
             if (piece.belongBlack()) {
@@ -347,6 +324,26 @@ public class Position {
         return locations;
     }
 
+    private void addKingYMove_IDEA(int cx, List<Location> locations, Piece pk, int ty) {
+        if (ty == pk.at.y) {
+            boolean f = false;
+            int s = Math.min(cx, pk.at.x);
+            int e = Math.max(cx, pk.at.x);
+            for (int x = s + 1; x < e; x++) {
+                if (board[x][ty] != null) {
+                    f = true;
+                    break;
+                }
+            }
+            if (f) {
+                checkForAdd(locations, cx, ty);
+            }
+        } else {
+            checkForAdd(locations, cx, ty);
+        }
+
+    }
+
     private void checkForAdd(List<Location> list, int x, int y) {
         if (x < 0 || x > 9 || y < 0 || y > 8) return;
         Piece piece = board[x][y];
@@ -409,20 +406,11 @@ public class Position {
      * @return 当前局面的胜利者，没有胜利者为null
      */
     public Player winner() {
-        if (cur == Player.BLACK) {
-            for (Piece piece: blackPieces) {
-                if (piece.type == PieceType.ADVISOR || piece.type == PieceType.BISHOP) continue;
-                for (Location location: canMoveLocations(piece)) {
-                    if (redKing.at.equals(location)) return Player.BLACK;
-                }
-            }
-        } else {
-            for (Piece piece: redPieces) {
-                if (piece.type == PieceType.ADVISOR || piece.type == PieceType.BISHOP) continue;
-                for (Location location: canMoveLocations(piece)) {
-                    if (blackKing.at.equals(location)) return Player.RED;
-                }
-            }
+        if (redKing == null) {
+            return Player.BLACK;
+        }
+        if (blackKing == null) {
+            return Player.RED;
         }
         return null;
     }

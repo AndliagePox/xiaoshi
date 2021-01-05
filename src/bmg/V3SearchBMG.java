@@ -62,8 +62,10 @@ public class V3SearchBMG extends ABSearchBMG {
             }
             sb.deleteCharAt(sb.length() - 1);
             System.out.println(sb.toString());
+
+            // 本层搜索时间小于1秒，整体搜索时间小于10秒，则进行下一层搜索
             long ct = System.currentTimeMillis() - totalTime;
-            if (i == depth && ct < 4000) {
+            if (i == depth && time < 1000 && ct < 10000) {
                 depth++;
             }
         }
