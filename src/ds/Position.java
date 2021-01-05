@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 棋局，描述当前局面
  */
-public class Position {
+public class Position implements Cloneable {
     /**
      * 到哪方走棋
      */
@@ -20,13 +20,13 @@ public class Position {
     /**
      * 棋盘
      */
-    private final Piece[][] board = new Piece[10][9];
+    private Piece[][] board = new Piece[10][9];
 
     /**
      * 红黑双方的子
      */
-    private final List<Piece> redPieces = new ArrayList<>();
-    private final List<Piece> blackPieces = new ArrayList<>();
+    private List<Piece> redPieces = new ArrayList<>();
+    private List<Piece> blackPieces = new ArrayList<>();
 
     /**
      * 将帅，用于判定胜负
@@ -148,7 +148,7 @@ public class Position {
      * @return 返回新的棋局，本棋局进行move移动动后的棋局
      */
     public Position nextMove(Move move) {
-        Position next = new Position(this.toString());
+        Position next = (Position) clone();
         next.applyMove(move);
         return next;
     }
@@ -429,5 +429,40 @@ public class Position {
 
     public List<Piece> getBlackPieces() {
         return blackPieces;
+    }
+
+    @Override
+    public Object clone() {
+        Position position;
+        try {
+            position= (Position) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Clone fail.");
+        }
+        position.cur = cur;
+        position.board = new Piece[10][9];
+        position.redPieces = new ArrayList<>();
+        position.blackPieces = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                Piece sp = board[i][j];
+                if (sp == null) continue;
+                Piece np = new Piece(sp.c, i, j);
+                position.board[i][j] = np;
+                if (np.belong == Player.BLACK) {
+                    position.blackPieces.add(np);
+                    if (np.type == PieceType.KING) {
+                        position.blackKing = np;
+                    }
+                } else {
+                    position.redPieces.add(np);
+                    if (np.type == PieceType.KING) {
+                        position.redKing = np;
+                    }
+                }
+            }
+        }
+        return position;
     }
 }
