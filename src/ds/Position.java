@@ -154,6 +154,16 @@ public class Position implements Cloneable {
     }
 
     /**
+     * 空着(更换当前走子玩家)
+     * @return 新棋局，轮到另一名玩家
+     */
+    public Position nullMove() {
+        Position position = (Position) clone();
+        position.cur = anotherPlayer();
+        return position;
+    }
+
+    /**
      * 寻找一个棋子所有合法的可移动位置
      * @param piece 棋子
      * @return 位置列表

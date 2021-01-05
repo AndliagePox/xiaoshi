@@ -91,6 +91,12 @@ public class V3SearchBMG extends ABSearchBMG {
             return bestResult;
         }
 
+        // 空着裁剪
+        Result nullResult = search(position.nullMove(), b.reverse(), a.reverse(), depth - 3).reverse();
+        if (nullResult.score >= b.score) {
+            return b;
+        }
+
         curDepth++;
 
         for (Move move: mlg.generateMoveList(position)) {
