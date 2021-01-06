@@ -92,7 +92,9 @@ public class V3SearchBMG extends ABSearchBMG {
         }
 
         // 空着裁剪
-        Result nullResult = search(position.nullMove(), b.reverse(), a.reverse(), depth - 3).reverse();
+        position.changeCur();
+        Result nullResult = search(position, b.reverse(), a.reverse(), depth - 3).reverse();
+        position.changeCur();
         if (nullResult.score >= b.score) {
             return b;
         }
@@ -100,7 +102,9 @@ public class V3SearchBMG extends ABSearchBMG {
         curDepth++;
 
         for (Move move: mlg.generateMoveList(position)) {
-            Result next = search(position.nextMove(move), b.reverse(), a.reverse(), depth - 1).reverse();
+            position.applyMove(move);
+            Result next = search(position, b.reverse(), a.reverse(), depth - 1).reverse();
+            position.undoMove();
             if (next.score >= b.score) {
                 b.moveList.addFirst(move);
                 // 发生截断，添加着法

@@ -6,6 +6,7 @@
 package ds;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,6 +34,11 @@ public class Position implements Cloneable {
      */
     private Piece redKing;
     private Piece blackKing;
+
+    /**
+     * 移动栈，用于撤销上一步移动
+     */
+    public LinkedList<MoveRecord> moveStack = new LinkedList<>();
 
     /**
      * 通过fen串创建局面，fen串规则参阅：http://www.xqbase.com/protocol/cchess_fen.htm
@@ -83,6 +89,10 @@ public class Position implements Cloneable {
      * @param move 进行的移动
      */
     public void applyMove(Move move) {
+        applyMove(move, true);
+    }
+
+    public void applyMove(Move move, boolean addToStack) {
         int fx = move.from.x;
         int fy = move.from.y;
         int tx = move.to.x;
@@ -100,6 +110,10 @@ public class Position implements Cloneable {
             redPieces.remove(board[tx][ty]);
             blackPieces.remove(board[tx][ty]);
         }
+        Piece tar = board[tx][ty];
+        if (addToStack) {
+            moveStack.add(new MoveRecord(move, tar));
+        }
         board[tx][ty] = piece;
         piece.at = new Location(tx, ty);
         cur = anotherPlayer();
@@ -108,6 +122,28 @@ public class Position implements Cloneable {
     public void applyMoves(List<Move> moves) {
         for (Move move: moves) {
             applyMove(move);
+        }
+    }
+
+    public void undoMove() {
+        if (moveStack.isEmpty()) return;
+        MoveRecord record = moveStack.pollLast();
+        Move move = record.move;
+        Piece piece = record.tar;
+        applyMove(new Move(move.to, move.from), false);
+        board[move.to.x][move.to.y] = piece;
+        if (piece != null) {
+            if (piece.belongBlack()) {
+                blackPieces.add(piece);
+                if (piece.type == PieceType.KING) {
+                    blackKing = piece;
+                }
+            } else {
+                redPieces.add(piece);
+                if (piece.type == PieceType.KING) {
+                    redKing = piece;
+                }
+            }
         }
     }
 
@@ -155,12 +191,9 @@ public class Position implements Cloneable {
 
     /**
      * 空着(更换当前走子玩家)
-     * @return 新棋局，轮到另一名玩家
      */
-    public Position nullMove() {
-        Position position = (Position) clone();
-        position.cur = anotherPlayer();
-        return position;
+    public void changeCur() {
+        cur = anotherPlayer();
     }
 
     /**
@@ -454,6 +487,7 @@ public class Position implements Cloneable {
         position.board = new Piece[10][9];
         position.redPieces = new ArrayList<>();
         position.blackPieces = new ArrayList<>();
+        position.moveStack = new LinkedList<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 Piece sp = board[i][j];
@@ -474,5 +508,15 @@ public class Position implements Cloneable {
             }
         }
         return position;
+    }
+
+    static class MoveRecord {
+        Move move;
+        Piece tar;
+
+        public MoveRecord(Move move, Piece tar) {
+            this.move = move;
+            this.tar = tar;
+        }
     }
 }
