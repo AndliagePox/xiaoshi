@@ -224,12 +224,25 @@ public class Position implements Cloneable {
                 }
                 pk = blackKing;
             }
-            int ty;
-            if ((ty = cy - 1) >= 3) {
-                addKingYMove_IDEA(cx, locations, pk, ty);
+            if (cy - 1 >= 3) {
+                checkForAdd(locations, cx, cy - 1);
             }
-            if ((ty = cy + 1) <= 5) {
-                addKingYMove_IDEA(cx, locations, pk, ty);
+            if (cy + 1 <= 5) {
+                checkForAdd(locations, cx, cy + 1);
+            }
+            if (pk != null && pk.at.y == cy) {
+                boolean f = false;
+                int s = Math.min(cx, pk.at.x) + 1;
+                int e = Math.max(cx, pk.at.x) - 1;
+                for (int x = s; x <= e; x++) {
+                    if (board[x][cy] != null) {
+                        f = true;
+                        break;
+                    }
+                }
+                if (!f) {
+                    checkForAdd(locations, pk.at.x, cy);
+                }
             }
         } else if (piece.type == PieceType.ADVISOR) {
             if (piece.belongBlack()) {
@@ -365,26 +378,6 @@ public class Position implements Cloneable {
             }
         }
         return locations;
-    }
-
-    private void addKingYMove_IDEA(int cx, List<Location> locations, Piece pk, int ty) {
-        if (ty == pk.at.y) {
-            boolean f = false;
-            int s = Math.min(cx, pk.at.x);
-            int e = Math.max(cx, pk.at.x);
-            for (int x = s + 1; x < e; x++) {
-                if (board[x][ty] != null) {
-                    f = true;
-                    break;
-                }
-            }
-            if (f) {
-                checkForAdd(locations, cx, ty);
-            }
-        } else {
-            checkForAdd(locations, cx, ty);
-        }
-
     }
 
     private void checkForAdd(List<Location> list, int x, int y) {

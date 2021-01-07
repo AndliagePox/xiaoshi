@@ -20,6 +20,7 @@ import java.util.LinkedList;
  */
 public class V3SearchBMG extends ABSearchBMG {
     private int curDepth;
+    private boolean nullSearch = false;
     private final IteratorMLG iteratorMLG = (IteratorMLG) mlg;
     private final CutOffMLG cutOffMLG = (CutOffMLG) mlg;
 
@@ -35,6 +36,7 @@ public class V3SearchBMG extends ABSearchBMG {
         cutOffMLG.clearCutOffMoves();
 
         int depth = Configuration.getSearchDepth();
+        int maxDepth = Configuration.getMaxDepth();
         long time, totalTime = System.currentTimeMillis();
         Result result = null;
         for (int i = 1; i <= depth; i++) {
@@ -63,9 +65,17 @@ public class V3SearchBMG extends ABSearchBMG {
             sb.deleteCharAt(sb.length() - 1);
             System.out.println(sb.toString());
 
+            if (i >= maxDepth) break;
+
             // 本层搜索时间小于1秒，整体搜索时间小于10秒，则进行下一层搜索
             long ct = System.currentTimeMillis() - totalTime;
-            if (i == depth && time < 1000 && ct < 10000) {
+            if (
+                    i == depth
+                    && time < 1000
+                    && ct < 10000
+                    && result.score < 40000
+                    && result.score > -40000
+            ) {
                 depth++;
             }
         }
@@ -92,17 +102,26 @@ public class V3SearchBMG extends ABSearchBMG {
         }
 
         // 空着裁剪
-        position.changeCur();
-        Result nullResult = search(position, b.reverse(), a.reverse(), depth - 3).reverse();
-        position.changeCur();
-        if (nullResult.score >= b.score) {
-            return b;
+        if (!nullSearch) {
+            nullSearch = true;
+            position.changeCur();
+            Result nullResult = search(
+                    position,
+                    b.reverse(),
+                    new Result(1 - b.score, new LinkedList<>(b.moveList)),
+                    depth - 3
+            ).reverse();
+            position.changeCur();
+            if (nullResult.score >= b.score) {
+                return b;
+            }
         }
 
         curDepth++;
 
         for (Move move: mlg.generateMoveList(position)) {
             position.applyMove(move);
+            nullSearch = false;
             Result next = search(position, b.reverse(), a.reverse(), depth - 1).reverse();
             position.undoMove();
             if (next.score >= b.score) {

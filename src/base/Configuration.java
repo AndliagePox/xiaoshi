@@ -53,6 +53,10 @@ public class Configuration {
         return Integer.parseInt(map.get("depth"));
     }
 
+    public static int getMaxDepth() {
+        return Integer.parseInt(map.get("max-depth"));
+    }
+
     public static boolean enableBook() {
         return map.get("book-enable").equals("true");
     }
