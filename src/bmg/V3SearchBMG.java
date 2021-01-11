@@ -96,7 +96,6 @@ public class V3SearchBMG extends ABSearchBMG {
         }
 
         if (depth <= 0) {
-            nodes++;
             bestResult.score = evaluator.evaluate(position);
             return bestResult;
         }

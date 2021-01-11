@@ -11,6 +11,8 @@ import book.BookFactory;
 import ds.Location;
 import ds.Move;
 import ds.Position;
+import mlg.MLGFactory;
+import mlg.MoveListGenerator;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,12 +46,14 @@ public class Main {
                 } else {
                     System.out.println("bestmove " + move);
                 }
+                MLGFactory.getMLG().clearBanMoves();
             } else if (command.startsWith("position")) {
                 String fen;
+                Position np;
                 int movesStart = command.indexOf("moves");
                 if (movesStart == -1) {
                     fen = command.substring(13);
-                    position = new Position(fen);
+                    np = new Position(fen);
                 } else {
                     fen = command.substring(13, movesStart);
                     String[] movesStr = command.substring(movesStart).split(" ");
@@ -60,9 +64,21 @@ public class Main {
                         Location to = new Location(curMove.substring(2));
                         moves.add(new Move(from, to));
                     }
-                    position = new Position(fen);
-                    position.applyMoves(moves);
+                    np = new Position(fen);
+                    np.applyMoves(moves);
                 }
+                if (np.pieceCount() > position.pieceCount()) {
+                    Position.newGame();
+                }
+                position = np;
+            } else if (command.startsWith("banmoves")) {
+                String moveStr = command.substring(command.indexOf(' ') + 1);
+                MoveListGenerator mlg = MLGFactory.getMLG();
+                for (String s: moveStr.split(" ")) {
+                    mlg.addBanMove(new Move(s));
+                }
+            } else if (command.equals("test")) {
+                System.out.println("test");
             }
             System.out.flush();
         }

@@ -5,6 +5,8 @@
 
 package ds;
 
+import mlg.MLGFactory;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +41,14 @@ public class Position implements Cloneable {
      * 移动栈，用于撤销上一步移动
      */
     public LinkedList<MoveRecord> moveStack = new LinkedList<>();
+
+    /**
+     * 执行一些新棋局初始化工作
+     * 目前通过棋子数量是不是变多了来判断
+     */
+    public static void newGame() {
+        MLGFactory.getMLG().clearBanMoves();
+    }
 
     /**
      * 通过fen串创建局面，fen串规则参阅：http://www.xqbase.com/protocol/cchess_fen.htm
@@ -436,9 +446,16 @@ public class Position implements Cloneable {
         else return Player.BLACK;
     }
 
+    public int pieceCount() {
+        return redPieces.size() + blackPieces.size();
+    }
+
     /**
      * 判定胜负，条件是轮到自己走且能吃掉对方将
      * 上个版本是判断将帅是否存活，该版本虽然降低了平时的搜索效率，但能在提前一层搜到杀棋，对后期残局提升很大
+     *
+     * 很好，我又改回上上个版本了，每次检测属于无用功，对平时的效率影响也很大
+     *
      * @return 当前局面的胜利者，没有胜利者为null
      */
     public Player winner() {

@@ -39,7 +39,7 @@ public class ScoreMLG extends BaseMLG implements IteratorMLG, CutOffMLG {
     @Override
     public List<Move> generateMoveList(Position position) {
         this.position = position;
-        moveList = new DefaultMLG().generateMoveList(position);
+        moveList = baseMoveList(position);
         moveScore.clear();
         calcScore();
         moveList.sort(Comparator.comparingInt((move) -> -moveScore.get(move)));
