@@ -484,6 +484,10 @@ public class Position implements Cloneable {
         return blackPieces;
     }
 
+    public Piece getPieceByLocation(Location location) {
+        return board[location.x][location.y];
+    }
+
     @Override
     public Object clone() {
         Position position;

@@ -7,6 +7,7 @@ package mlg;
 
 import ds.Move;
 import ds.Piece;
+import ds.PieceType;
 import ds.Position;
 
 import java.util.*;
@@ -51,14 +52,16 @@ public class ScoreMLG extends BaseMLG implements IteratorMLG, CutOffMLG {
         for (Move move: moveList) {
             int sc = 0;
 
-            // 最优先的是上次搜索的结果
+            // 上次搜索结果
             if (lastResultMoveList != null && lastResultMoveList.contains(move)) {
                 sc += 5000;
             }
 
-            // 其次是吃子着法
-            Piece tar;
-            if ((tar = position.getBoard()[move.to.x][move.to.y]) != null) {
+            Piece self = position.getPieceByLocation(move.from);
+            Piece tar = position.getPieceByLocation(move.to);
+
+            // 吃子着法
+            if (tar != null) {
                 switch (tar.type) {
                     case KING:
                         sc += 30000;
@@ -76,9 +79,16 @@ public class ScoreMLG extends BaseMLG implements IteratorMLG, CutOffMLG {
                 }
             }
 
-            // 然后是产生截断的着法
+            // 产生截断的着法
             if (cutOffSet.contains(move)) {
                 sc += 400;
+            }
+
+            // 优先动大子
+            if (self.type == PieceType.ROOK
+                    || self.type == PieceType.KNIGHT
+                    || self.type == PieceType.CANNON) {
+                sc += 100;
             }
 
             moveScore.put(move, sc);

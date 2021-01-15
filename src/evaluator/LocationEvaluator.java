@@ -186,7 +186,7 @@ public class LocationEvaluator extends BaseEvaluator {
     /**
      * 进攻子力阈值
      */
-    private static final int ATK_DEF_BOUND = 3;
+    private static final int ATK_DEF_BOUND = 2;
 
     LocationEvaluator() {}
 
